@@ -14,9 +14,9 @@ pipeline {
         GITHUB_CREDENTIAL_ID = 'Github'
         KUBECONFIG_CREDENTIAL_ID = 'Kubernetes'
         REGISTRY = '10.241.1.39'
-        DOCKERHUB_NAMESPACE = 'library001'
+        DOCKERHUB_NAMESPACE = 'paas'
         GITHUB_ACCOUNT = 'Talentjackchen'
-        APP_NAME = 'devops-java-sample'
+        APP_NAME = 'paas-object-storage'
         SONAR_CREDENTIAL_ID= 'sonar-token'
     }
 
