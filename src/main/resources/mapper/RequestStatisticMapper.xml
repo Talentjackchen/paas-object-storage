@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wondersgroup.cloud.paas.storage.mapper.RequestStatisticMapper">
+    <resultMap id="BaseResultMap" type="com.wondersgroup.cloud.paas.storage.model.RequestStatistic">
+        <constructor>
+            <idArg column="request_statistic_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="amount" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="type" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="storage_type" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="bucket_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="record_time" javaType="java.util.Date" jdbcType="DATE"/>
+        </constructor>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    request_statistic_id, amount, `type`, storage_type, bucket_id, record_time
+  </sql>
+    <select id="selectByExample" parameterType="com.wondersgroup.cloud.paas.storage.model.RequestStatisticExample"
+            resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from request_statistic
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from request_statistic
+        where request_statistic_id = #{requestStatisticId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from request_statistic
+    where request_statistic_id = #{requestStatisticId,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.wondersgroup.cloud.paas.storage.model.RequestStatisticExample">
+        delete from request_statistic
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.wondersgroup.cloud.paas.storage.model.RequestStatistic">
+    insert into request_statistic (request_statistic_id, amount, `type`, 
+      storage_type, bucket_id, record_time
+      )
+    values (#{requestStatisticId,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, 
+      #{storageType,jdbcType=VARCHAR}, #{bucketId,jdbcType=VARCHAR}, #{recordTime,jdbcType=DATE}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.wondersgroup.cloud.paas.storage.model.RequestStatistic">
+        insert into request_statistic
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="requestStatisticId != null">
+                request_statistic_id,
+            </if>
+            <if test="amount != null">
+                amount,
+            </if>
+            <if test="type != null">
+                `type`,
+            </if>
+            <if test="storageType != null">
+                storage_type,
+            </if>
+            <if test="bucketId != null">
+                bucket_id,
+            </if>
+            <if test="recordTime != null">
+                record_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="requestStatisticId != null">
+                #{requestStatisticId,jdbcType=VARCHAR},
+            </if>
+            <if test="amount != null">
+                #{amount,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="storageType != null">
+                #{storageType,jdbcType=VARCHAR},
+            </if>
+            <if test="bucketId != null">
+                #{bucketId,jdbcType=VARCHAR},
+            </if>
+            <if test="recordTime != null">
+                #{recordTime,jdbcType=DATE},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.wondersgroup.cloud.paas.storage.model.RequestStatisticExample"
+            resultType="java.lang.Long">
+        select count(*) from request_statistic
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update request_statistic
+        <set>
+            <if test="record.requestStatisticId != null">
+                request_statistic_id = #{record.requestStatisticId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.amount != null">
+                amount = #{record.amount,jdbcType=INTEGER},
+            </if>
+            <if test="record.type != null">
+                `type` = #{record.type,jdbcType=VARCHAR},
+            </if>
+            <if test="record.storageType != null">
+                storage_type = #{record.storageType,jdbcType=VARCHAR},
+            </if>
+            <if test="record.bucketId != null">
+                bucket_id = #{record.bucketId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.recordTime != null">
+                record_time = #{record.recordTime,jdbcType=DATE},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update request_statistic
+        set request_statistic_id = #{record.requestStatisticId,jdbcType=VARCHAR},
+        amount = #{record.amount,jdbcType=INTEGER},
+        `type` = #{record.type,jdbcType=VARCHAR},
+        storage_type = #{record.storageType,jdbcType=VARCHAR},
+        bucket_id = #{record.bucketId,jdbcType=VARCHAR},
+        record_time = #{record.recordTime,jdbcType=DATE}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.wondersgroup.cloud.paas.storage.model.RequestStatistic">
+        update request_statistic
+        <set>
+            <if test="amount != null">
+                amount = #{amount,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                `type` = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="storageType != null">
+                storage_type = #{storageType,jdbcType=VARCHAR},
+            </if>
+            <if test="bucketId != null">
+                bucket_id = #{bucketId,jdbcType=VARCHAR},
+            </if>
+            <if test="recordTime != null">
+                record_time = #{recordTime,jdbcType=DATE},
+            </if>
+        </set>
+        where request_statistic_id = #{requestStatisticId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.wondersgroup.cloud.paas.storage.model.RequestStatistic">
+    update request_statistic
+    set amount = #{amount,jdbcType=INTEGER},
+      `type` = #{type,jdbcType=VARCHAR},
+      storage_type = #{storageType,jdbcType=VARCHAR},
+      bucket_id = #{bucketId,jdbcType=VARCHAR},
+      record_time = #{recordTime,jdbcType=DATE}
+    where request_statistic_id = #{requestStatisticId,jdbcType=VARCHAR}
+  </update>
+    <select id="selectByExampleWithRowbounds"
+            parameterType="com.wondersgroup.cloud.paas.storage.model.RequestStatisticExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from request_statistic
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+</mapper>

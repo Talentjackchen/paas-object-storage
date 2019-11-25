@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wondersgroup.cloud.paas.storage.mapper.ProjectAuthorityMapper">
+    <resultMap id="BaseResultMap" type="com.wondersgroup.cloud.paas.storage.model.ProjectAuthority">
+        <constructor>
+            <idArg column="project_authority_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="project_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="access_key" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="secret_key" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="status" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="valid_flag" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+            <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        </constructor>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    project_authority_id, project_id, access_key, secret_key, `status`, valid_flag, create_time, 
+    update_time
+  </sql>
+    <select id="selectByExample" parameterType="com.wondersgroup.cloud.paas.storage.model.ProjectAuthorityExample"
+            resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from project_authority
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from project_authority
+        where project_authority_id = #{projectAuthorityId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from project_authority
+    where project_authority_id = #{projectAuthorityId,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.wondersgroup.cloud.paas.storage.model.ProjectAuthorityExample">
+        delete from project_authority
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.wondersgroup.cloud.paas.storage.model.ProjectAuthority">
+    insert into project_authority (project_authority_id, project_id, access_key, 
+      secret_key, `status`, valid_flag, 
+      create_time, update_time)
+    values (#{projectAuthorityId,jdbcType=VARCHAR}, #{projectId,jdbcType=VARCHAR}, #{accessKey,jdbcType=VARCHAR}, 
+      #{secretKey,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{validFlag,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" parameterType="com.wondersgroup.cloud.paas.storage.model.ProjectAuthority">
+        insert into project_authority
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectAuthorityId != null">
+                project_authority_id,
+            </if>
+            <if test="projectId != null">
+                project_id,
+            </if>
+            <if test="accessKey != null">
+                access_key,
+            </if>
+            <if test="secretKey != null">
+                secret_key,
+            </if>
+            <if test="status != null">
+                `status`,
+            </if>
+            <if test="validFlag != null">
+                valid_flag,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectAuthorityId != null">
+                #{projectAuthorityId,jdbcType=VARCHAR},
+            </if>
+            <if test="projectId != null">
+                #{projectId,jdbcType=VARCHAR},
+            </if>
+            <if test="accessKey != null">
+                #{accessKey,jdbcType=VARCHAR},
+            </if>
+            <if test="secretKey != null">
+                #{secretKey,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="validFlag != null">
+                #{validFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.wondersgroup.cloud.paas.storage.model.ProjectAuthorityExample"
+            resultType="java.lang.Long">
+        select count(*) from project_authority
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update project_authority
+        <set>
+            <if test="record.projectAuthorityId != null">
+                project_authority_id = #{record.projectAuthorityId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.projectId != null">
+                project_id = #{record.projectId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.accessKey != null">
+                access_key = #{record.accessKey,jdbcType=VARCHAR},
+            </if>
+            <if test="record.secretKey != null">
+                secret_key = #{record.secretKey,jdbcType=VARCHAR},
+            </if>
+            <if test="record.status != null">
+                `status` = #{record.status,jdbcType=VARCHAR},
+            </if>
+            <if test="record.validFlag != null">
+                valid_flag = #{record.validFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update project_authority
+        set project_authority_id = #{record.projectAuthorityId,jdbcType=VARCHAR},
+        project_id = #{record.projectId,jdbcType=VARCHAR},
+        access_key = #{record.accessKey,jdbcType=VARCHAR},
+        secret_key = #{record.secretKey,jdbcType=VARCHAR},
+        `status` = #{record.status,jdbcType=VARCHAR},
+        valid_flag = #{record.validFlag,jdbcType=VARCHAR},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.wondersgroup.cloud.paas.storage.model.ProjectAuthority">
+        update project_authority
+        <set>
+            <if test="projectId != null">
+                project_id = #{projectId,jdbcType=VARCHAR},
+            </if>
+            <if test="accessKey != null">
+                access_key = #{accessKey,jdbcType=VARCHAR},
+            </if>
+            <if test="secretKey != null">
+                secret_key = #{secretKey,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="validFlag != null">
+                valid_flag = #{validFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where project_authority_id = #{projectAuthorityId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.wondersgroup.cloud.paas.storage.model.ProjectAuthority">
+    update project_authority
+    set project_id = #{projectId,jdbcType=VARCHAR},
+      access_key = #{accessKey,jdbcType=VARCHAR},
+      secret_key = #{secretKey,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=VARCHAR},
+      valid_flag = #{validFlag,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where project_authority_id = #{projectAuthorityId,jdbcType=VARCHAR}
+  </update>
+    <select id="selectByExampleWithRowbounds"
+            parameterType="com.wondersgroup.cloud.paas.storage.model.ProjectAuthorityExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from project_authority
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+</mapper>

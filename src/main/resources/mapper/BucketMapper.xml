@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wondersgroup.cloud.paas.storage.mapper.BucketMapper">
+    <resultMap id="BaseResultMap" type="com.wondersgroup.cloud.paas.storage.model.Bucket">
+        <constructor>
+            <idArg column="bucket_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="alias_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="region" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="type" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="domain" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="status" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="domain_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="account_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="project_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="valid_flag" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="remote_flag" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+            <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        </constructor>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    bucket_id, `name`, alias_name, region, `type`, `domain`, `status`, domain_id, account_id, 
+    project_id, valid_flag, remote_flag, create_time, update_time
+  </sql>
+    <select id="selectByExample" parameterType="com.wondersgroup.cloud.paas.storage.model.BucketExample"
+            resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from bucket
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from bucket
+        where bucket_id = #{bucketId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from bucket
+    where bucket_id = #{bucketId,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.wondersgroup.cloud.paas.storage.model.BucketExample">
+        delete from bucket
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.wondersgroup.cloud.paas.storage.model.Bucket">
+    insert into bucket (bucket_id, `name`, alias_name, 
+      region, `type`, `domain`, 
+      `status`, domain_id, account_id, 
+      project_id, valid_flag, remote_flag, 
+      create_time, update_time)
+    values (#{bucketId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{aliasName,jdbcType=VARCHAR}, 
+      #{region,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{domain,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{domainId,jdbcType=VARCHAR}, #{accountId,jdbcType=VARCHAR}, 
+      #{projectId,jdbcType=VARCHAR}, #{validFlag,jdbcType=VARCHAR}, #{remoteFlag,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" parameterType="com.wondersgroup.cloud.paas.storage.model.Bucket">
+        insert into bucket
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bucketId != null">
+                bucket_id,
+            </if>
+            <if test="name != null">
+                `name`,
+            </if>
+            <if test="aliasName != null">
+                alias_name,
+            </if>
+            <if test="region != null">
+                region,
+            </if>
+            <if test="type != null">
+                `type`,
+            </if>
+            <if test="domain != null">
+                `domain`,
+            </if>
+            <if test="status != null">
+                `status`,
+            </if>
+            <if test="domainId != null">
+                domain_id,
+            </if>
+            <if test="accountId != null">
+                account_id,
+            </if>
+            <if test="projectId != null">
+                project_id,
+            </if>
+            <if test="validFlag != null">
+                valid_flag,
+            </if>
+            <if test="remoteFlag != null">
+                remote_flag,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bucketId != null">
+                #{bucketId,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="aliasName != null">
+                #{aliasName,jdbcType=VARCHAR},
+            </if>
+            <if test="region != null">
+                #{region,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="domain != null">
+                #{domain,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="domainId != null">
+                #{domainId,jdbcType=VARCHAR},
+            </if>
+            <if test="accountId != null">
+                #{accountId,jdbcType=VARCHAR},
+            </if>
+            <if test="projectId != null">
+                #{projectId,jdbcType=VARCHAR},
+            </if>
+            <if test="validFlag != null">
+                #{validFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="remoteFlag != null">
+                #{remoteFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.wondersgroup.cloud.paas.storage.model.BucketExample"
+            resultType="java.lang.Long">
+        select count(*) from bucket
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update bucket
+        <set>
+            <if test="record.bucketId != null">
+                bucket_id = #{record.bucketId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.name != null">
+                `name` = #{record.name,jdbcType=VARCHAR},
+            </if>
+            <if test="record.aliasName != null">
+                alias_name = #{record.aliasName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.region != null">
+                region = #{record.region,jdbcType=VARCHAR},
+            </if>
+            <if test="record.type != null">
+                `type` = #{record.type,jdbcType=VARCHAR},
+            </if>
+            <if test="record.domain != null">
+                `domain` = #{record.domain,jdbcType=VARCHAR},
+            </if>
+            <if test="record.status != null">
+                `status` = #{record.status,jdbcType=VARCHAR},
+            </if>
+            <if test="record.domainId != null">
+                domain_id = #{record.domainId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.accountId != null">
+                account_id = #{record.accountId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.projectId != null">
+                project_id = #{record.projectId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.validFlag != null">
+                valid_flag = #{record.validFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="record.remoteFlag != null">
+                remote_flag = #{record.remoteFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update bucket
+        set bucket_id = #{record.bucketId,jdbcType=VARCHAR},
+        `name` = #{record.name,jdbcType=VARCHAR},
+        alias_name = #{record.aliasName,jdbcType=VARCHAR},
+        region = #{record.region,jdbcType=VARCHAR},
+        `type` = #{record.type,jdbcType=VARCHAR},
+        `domain` = #{record.domain,jdbcType=VARCHAR},
+        `status` = #{record.status,jdbcType=VARCHAR},
+        domain_id = #{record.domainId,jdbcType=VARCHAR},
+        account_id = #{record.accountId,jdbcType=VARCHAR},
+        project_id = #{record.projectId,jdbcType=VARCHAR},
+        valid_flag = #{record.validFlag,jdbcType=VARCHAR},
+        remote_flag = #{record.remoteFlag,jdbcType=VARCHAR},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.wondersgroup.cloud.paas.storage.model.Bucket">
+        update bucket
+        <set>
+            <if test="name != null">
+                `name` = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="aliasName != null">
+                alias_name = #{aliasName,jdbcType=VARCHAR},
+            </if>
+            <if test="region != null">
+                region = #{region,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                `type` = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="domain != null">
+                `domain` = #{domain,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="domainId != null">
+                domain_id = #{domainId,jdbcType=VARCHAR},
+            </if>
+            <if test="accountId != null">
+                account_id = #{accountId,jdbcType=VARCHAR},
+            </if>
+            <if test="projectId != null">
+                project_id = #{projectId,jdbcType=VARCHAR},
+            </if>
+            <if test="validFlag != null">
+                valid_flag = #{validFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="remoteFlag != null">
+                remote_flag = #{remoteFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where bucket_id = #{bucketId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.wondersgroup.cloud.paas.storage.model.Bucket">
+    update bucket
+    set `name` = #{name,jdbcType=VARCHAR},
+      alias_name = #{aliasName,jdbcType=VARCHAR},
+      region = #{region,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=VARCHAR},
+      `domain` = #{domain,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=VARCHAR},
+      domain_id = #{domainId,jdbcType=VARCHAR},
+      account_id = #{accountId,jdbcType=VARCHAR},
+      project_id = #{projectId,jdbcType=VARCHAR},
+      valid_flag = #{validFlag,jdbcType=VARCHAR},
+      remote_flag = #{remoteFlag,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where bucket_id = #{bucketId,jdbcType=VARCHAR}
+  </update>
+    <select id="selectByExampleWithRowbounds" parameterType="com.wondersgroup.cloud.paas.storage.model.BucketExample"
+            resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from bucket
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+</mapper>

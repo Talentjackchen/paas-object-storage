@@ -1,0 +1,7 @@
+server:
+  port: 8180
+spring:
+  profiles:
+    include: beta-db,beta-redis,beta-auth
+  aop:
+    log: true

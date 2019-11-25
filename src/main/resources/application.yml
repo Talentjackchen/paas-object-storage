@@ -1,0 +1,68 @@
+server:
+  servlet:
+    context-path: /paas-object-storage
+spring:
+  application:
+    name: paas-object-storage
+  profiles:
+    active: @spring.profiles.active@
+  datasource:
+    name: mydb
+    url: ${jdbc.url}
+    username: ${jdbc.username}
+    password: ${jdbc.password}
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: ${jdbc.driverClassName}
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+  servlet:
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 300MB
+  redis:
+    cluster:
+      password: ${redis.password}
+      nodes: ${redis.nodes}
+      max-redirects: ${redis.max-redirects}
+      #最大空闲数
+      maxIdle: ${redis.minIdle}
+      #客户端超时时间单位是毫秒
+      connectionTimeout: ${redis.connectionTimeout}
+      socketTimeout: ${redis.socketTimeout}
+      maxAttempts: ${redis.maxAttempts}
+      maxTotal: ${redis.maxTotal}
+      minIdle: ${redis.minIdle}
+
+#构建数据对象映射文件
+mybatis-plus:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: com.wondersgroup.cloud.paas.storage.model
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+
+#打印日志
+logging:
+  level:
+    com:
+      wondersgroup:
+        cloud:
+          paas:
+            storage:
+              mapper : DEBUG
+
+

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wondersgroup.cloud.paas.storage.mapper.TimestampAclMapper">
+    <resultMap id="BaseResultMap" type="com.wondersgroup.cloud.paas.storage.model.TimestampAcl">
+        <constructor>
+            <idArg column="timestamp_acl_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="main_key" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="spare_key" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="bucket_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        </constructor>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    timestamp_acl_id, main_key, spare_key, bucket_id
+  </sql>
+    <select id="selectByExample" parameterType="com.wondersgroup.cloud.paas.storage.model.TimestampAclExample"
+            resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from timestamp_acl
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from timestamp_acl
+        where timestamp_acl_id = #{timestampAclId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from timestamp_acl
+    where timestamp_acl_id = #{timestampAclId,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.wondersgroup.cloud.paas.storage.model.TimestampAclExample">
+        delete from timestamp_acl
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.wondersgroup.cloud.paas.storage.model.TimestampAcl">
+    insert into timestamp_acl (timestamp_acl_id, main_key, spare_key, 
+      bucket_id)
+    values (#{timestampAclId,jdbcType=VARCHAR}, #{mainKey,jdbcType=VARCHAR}, #{spareKey,jdbcType=VARCHAR}, 
+      #{bucketId,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.wondersgroup.cloud.paas.storage.model.TimestampAcl">
+        insert into timestamp_acl
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="timestampAclId != null">
+                timestamp_acl_id,
+            </if>
+            <if test="mainKey != null">
+                main_key,
+            </if>
+            <if test="spareKey != null">
+                spare_key,
+            </if>
+            <if test="bucketId != null">
+                bucket_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="timestampAclId != null">
+                #{timestampAclId,jdbcType=VARCHAR},
+            </if>
+            <if test="mainKey != null">
+                #{mainKey,jdbcType=VARCHAR},
+            </if>
+            <if test="spareKey != null">
+                #{spareKey,jdbcType=VARCHAR},
+            </if>
+            <if test="bucketId != null">
+                #{bucketId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.wondersgroup.cloud.paas.storage.model.TimestampAclExample"
+            resultType="java.lang.Long">
+        select count(*) from timestamp_acl
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update timestamp_acl
+        <set>
+            <if test="record.timestampAclId != null">
+                timestamp_acl_id = #{record.timestampAclId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.mainKey != null">
+                main_key = #{record.mainKey,jdbcType=VARCHAR},
+            </if>
+            <if test="record.spareKey != null">
+                spare_key = #{record.spareKey,jdbcType=VARCHAR},
+            </if>
+            <if test="record.bucketId != null">
+                bucket_id = #{record.bucketId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update timestamp_acl
+        set timestamp_acl_id = #{record.timestampAclId,jdbcType=VARCHAR},
+        main_key = #{record.mainKey,jdbcType=VARCHAR},
+        spare_key = #{record.spareKey,jdbcType=VARCHAR},
+        bucket_id = #{record.bucketId,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.wondersgroup.cloud.paas.storage.model.TimestampAcl">
+        update timestamp_acl
+        <set>
+            <if test="mainKey != null">
+                main_key = #{mainKey,jdbcType=VARCHAR},
+            </if>
+            <if test="spareKey != null">
+                spare_key = #{spareKey,jdbcType=VARCHAR},
+            </if>
+            <if test="bucketId != null">
+                bucket_id = #{bucketId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where timestamp_acl_id = #{timestampAclId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.wondersgroup.cloud.paas.storage.model.TimestampAcl">
+    update timestamp_acl
+    set main_key = #{mainKey,jdbcType=VARCHAR},
+      spare_key = #{spareKey,jdbcType=VARCHAR},
+      bucket_id = #{bucketId,jdbcType=VARCHAR}
+    where timestamp_acl_id = #{timestampAclId,jdbcType=VARCHAR}
+  </update>
+    <select id="selectByExampleWithRowbounds"
+            parameterType="com.wondersgroup.cloud.paas.storage.model.TimestampAclExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from timestamp_acl
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,7 @@
+server:
+  port: 8180
+spring:
+  profiles:
+    include: dev-db,dev-redis,dev-auth
+  aop:
+    log: true

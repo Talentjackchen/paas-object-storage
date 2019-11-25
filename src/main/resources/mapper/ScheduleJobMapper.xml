@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wondersgroup.cloud.paas.storage.mapper.ScheduleJobMapper">
+    <resultMap id="BaseResultMap" type="com.wondersgroup.cloud.paas.storage.model.ScheduleJob">
+        <constructor>
+            <idArg column="job_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="bean_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="method_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="params" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="cron_expression" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="status" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+            <arg column="invalid_time" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        </constructor>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    job_id, bean_name, method_name, params, cron_expression, `status`, remark, create_time, 
+    invalid_time
+  </sql>
+    <select id="selectByExample" parameterType="com.wondersgroup.cloud.paas.storage.model.ScheduleJobExample"
+            resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from schedule_job
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from schedule_job
+        where job_id = #{jobId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from schedule_job
+    where job_id = #{jobId,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.wondersgroup.cloud.paas.storage.model.ScheduleJobExample">
+        delete from schedule_job
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.wondersgroup.cloud.paas.storage.model.ScheduleJob">
+    insert into schedule_job (job_id, bean_name, method_name, 
+      params, cron_expression, `status`, 
+      remark, create_time, invalid_time
+      )
+    values (#{jobId,jdbcType=VARCHAR}, #{beanName,jdbcType=VARCHAR}, #{methodName,jdbcType=VARCHAR}, 
+      #{params,jdbcType=VARCHAR}, #{cronExpression,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{invalidTime,jdbcType=INTEGER}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.wondersgroup.cloud.paas.storage.model.ScheduleJob">
+        insert into schedule_job
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="jobId != null">
+                job_id,
+            </if>
+            <if test="beanName != null">
+                bean_name,
+            </if>
+            <if test="methodName != null">
+                method_name,
+            </if>
+            <if test="params != null">
+                params,
+            </if>
+            <if test="cronExpression != null">
+                cron_expression,
+            </if>
+            <if test="status != null">
+                `status`,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="invalidTime != null">
+                invalid_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="jobId != null">
+                #{jobId,jdbcType=VARCHAR},
+            </if>
+            <if test="beanName != null">
+                #{beanName,jdbcType=VARCHAR},
+            </if>
+            <if test="methodName != null">
+                #{methodName,jdbcType=VARCHAR},
+            </if>
+            <if test="params != null">
+                #{params,jdbcType=VARCHAR},
+            </if>
+            <if test="cronExpression != null">
+                #{cronExpression,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="invalidTime != null">
+                #{invalidTime,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.wondersgroup.cloud.paas.storage.model.ScheduleJobExample"
+            resultType="java.lang.Long">
+        select count(*) from schedule_job
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update schedule_job
+        <set>
+            <if test="record.jobId != null">
+                job_id = #{record.jobId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.beanName != null">
+                bean_name = #{record.beanName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.methodName != null">
+                method_name = #{record.methodName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.params != null">
+                params = #{record.params,jdbcType=VARCHAR},
+            </if>
+            <if test="record.cronExpression != null">
+                cron_expression = #{record.cronExpression,jdbcType=VARCHAR},
+            </if>
+            <if test="record.status != null">
+                `status` = #{record.status,jdbcType=VARCHAR},
+            </if>
+            <if test="record.remark != null">
+                remark = #{record.remark,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.invalidTime != null">
+                invalid_time = #{record.invalidTime,jdbcType=INTEGER},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update schedule_job
+        set job_id = #{record.jobId,jdbcType=VARCHAR},
+        bean_name = #{record.beanName,jdbcType=VARCHAR},
+        method_name = #{record.methodName,jdbcType=VARCHAR},
+        params = #{record.params,jdbcType=VARCHAR},
+        cron_expression = #{record.cronExpression,jdbcType=VARCHAR},
+        `status` = #{record.status,jdbcType=VARCHAR},
+        remark = #{record.remark,jdbcType=VARCHAR},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        invalid_time = #{record.invalidTime,jdbcType=INTEGER}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.wondersgroup.cloud.paas.storage.model.ScheduleJob">
+        update schedule_job
+        <set>
+            <if test="beanName != null">
+                bean_name = #{beanName,jdbcType=VARCHAR},
+            </if>
+            <if test="methodName != null">
+                method_name = #{methodName,jdbcType=VARCHAR},
+            </if>
+            <if test="params != null">
+                params = #{params,jdbcType=VARCHAR},
+            </if>
+            <if test="cronExpression != null">
+                cron_expression = #{cronExpression,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="invalidTime != null">
+                invalid_time = #{invalidTime,jdbcType=INTEGER},
+            </if>
+        </set>
+        where job_id = #{jobId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.wondersgroup.cloud.paas.storage.model.ScheduleJob">
+    update schedule_job
+    set bean_name = #{beanName,jdbcType=VARCHAR},
+      method_name = #{methodName,jdbcType=VARCHAR},
+      params = #{params,jdbcType=VARCHAR},
+      cron_expression = #{cronExpression,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      invalid_time = #{invalidTime,jdbcType=INTEGER}
+    where job_id = #{jobId,jdbcType=VARCHAR}
+  </update>
+    <select id="selectByExampleWithRowbounds"
+            parameterType="com.wondersgroup.cloud.paas.storage.model.ScheduleJobExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from schedule_job
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,7 @@
+server:
+  port: 8180
+spring:
+  profiles:
+    include: pro-db,pro-redis,pro-auth
+  aop:
+    log: true

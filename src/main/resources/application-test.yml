@@ -1,0 +1,7 @@
+server:
+  port: 8181
+spring:
+  profiles:
+    include: test-db,test-redis,test-auth
+  aop:
+    log: true

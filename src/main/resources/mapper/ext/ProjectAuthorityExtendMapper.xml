@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wondersgroup.cloud.paas.storage.mapper.ext.ProjectAuthorityExtendMapper">
+    <resultMap id="resultMap" type="com.wondersgroup.cloud.paas.storage.model.ProjectAuthority" >
+        <result column="project_authority_id" property="projectAuthorityId" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="project_id" property="projectId" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="access_key" property="accessKey" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="secret_key" property="secretKey" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="status" property="status" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime"  javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="createTime" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result column="valid_flag" property="validFlag"  javaType="java.lang.String" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getByBucketId" resultMap="resultMap" parameterType="java.lang.String">
+        select access_key,secret_key
+         from project_authority p
+         <where>
+             exists(
+                 select 1 from bucket  b
+                  <where>
+                      bucket_id = #{bucketId} and p.project_id = b.project_id
+                  </where>
+             )
+             and p.status = 1
+             and p.valid_flag = 1
+         </where>
+    </select>
+</mapper>

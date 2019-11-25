@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wondersgroup.cloud.paas.storage.mapper.ext.ResourceExtendMapper">
+  <resultMap id="BaseResultMap" type="com.wondersgroup.cloud.paas.storage.model.Resource">
+    <constructor>
+      <idArg column="resource_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="alias_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="type" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="bucket_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="save_type" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="life_cycle" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="create_user" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="valid_flag" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+
+  <select id="queryCountAndSize" resultType="java.util.HashMap" parameterType="java.util.Map">
+      SELECT SUM(file_size) AS size,COUNT(TYPE) AS count,type
+      FROM resource r
+    <where>
+      <if test='fileType != null and fileType != ""'>
+        and type = #{fileType}
+      </if>
+      <if test='bucketId != null and bucketId != ""'>
+        and bucket_id = #{bucketId}
+      </if>
+      <if test='projectId != null and projectId != ""'>
+        AND EXISTS (SELECT 1 FROM bucket b  WHERE b.`bucket_id` = r.`bucket_id` AND b.`project_id` = #{projectId})
+      </if>
+        and valid_flag = '1'
+    </where>
+      GROUP BY TYPE
+  </select>
+
+  <select id="getTotalSizeByBucketId" parameterType="java.util.Map" resultType="java.lang.Long">
+    select sum(file_size) from resource
+    <where>
+      <if test='bucketId != null and bucketId != ""'>
+        and bucket_id = #{bucketId}
+      </if>
+      <if test='storageType != null and storageType != ""'>
+        and storage_type = #{storageType}
+      </if>
+        and valid_flag = '1'
+    </where>
+  </select>
+
+  <update id="deleteByResource" parameterType="com.wondersgroup.cloud.paas.storage.model.Resource">
+    update resource
+    set
+    update_time = #{updateTime,jdbcType=TIMESTAMP},
+    valid_flag = '0'
+    where bucket_id = #{bucketId,jdbcType=VARCHAR}
+    and  valid_flag = '1'
+  </update>
+
+
+    <select id="getCountAndSizeByBucketId" resultType="java.util.HashMap" parameterType="java.util.Map">
+    SELECT bucket_id, SUM(file_size) AS file_size,COUNT(*) AS COUNT
+    FROM `resource`
+    WHERE valid_flag = '1' and bucket_id = #{bucketId,jdbcType=VARCHAR} GROUP BY bucket_id
+  </select>
+
+</mapper>

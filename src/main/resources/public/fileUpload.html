@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Title</title>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script>
+        //每个文件切片大小定为1M(1024*1024字节)(需要跟服务器协商好).
+        var blockSize = 4*1024*1024;
+        var uploadSize = 0;
+        // 总切片数
+        var totalSlices;
+        var endSize = 0;//末尾块大小
+
+        // 提交方法
+        function commit() {
+            // 拿出选中的第一个文件
+            var file = document.getElementById("file").files[0];
+
+            // 文件的总字节数
+            var totalSize = file.size;
+            // 分片的开始、结束（不含）
+            var start,end;
+            // 文件名
+            var fileName = file.name;
+            // 最后修改时间
+            var lastModifiedTime = getLastModifiedTime(file);
+
+            // 计算文件切片总数（向上取整）
+            totalSlices = Math.ceil(totalSize/blockSize);
+            endSize = totalSize - (totalSlices-1)*blockSize;
+            var key = $("#toFile").val();
+            $("#progress").text("");
+            uploadSize = 0;
+            $.ajax({
+                type:"GET",
+                url:"resource/checkFile",
+                headers:{"request_from":"Explore","bucketId":$("#bucketId").val()},
+                data:{
+                    "fileName":fileName,
+                    "key":key,
+                    "totalSize":totalSize,
+                    "lastModifiedTime":lastModifiedTime
+                },
+                dataType:"json",
+                success:function(data){
+                    debugger;
+                    var existsResumeArr;
+                    if(data.code == 200 && data.msg == "existsFile"){
+                        existsResumeArr = data.result;
+                        if($.inArray((totalSlices-1),existsResumeArr) != -1){
+                            uploadSize = (existsResumeArr.length - 1) * blockSize + endSize;
+                        }else{
+                            uploadSize = existsResumeArr.length * blockSize;
+                        }
+                        $("#progress").text(Math.floor((uploadSize/totalSize)*10000)/100+"%");
+                        if(uploadSize == totalSize){
+                            $("#progress").text("正在执行上传，请稍等...");
+                        }
+                        var slice1 =file.slice((totalSlices-1)*blockSize,totalSize);//切割文件
+                        uploadFile(slice1, totalSlices-1,fileName,totalSize,lastModifiedTime,key,true);
+                    }
+
+                    // 当前片数
+                    var index = 0;
+                    // 不断循环将切片上传
+                    while(index < totalSlices) {
+                        start = index*blockSize;
+                        end = start + blockSize;
+                        var slice =file.slice(start,end);//切割文件
+                        if($.inArray(index,existsResumeArr) == -1){
+                            uploadFile(slice, index,fileName,totalSize,lastModifiedTime,key,false);
+                        }
+                        index++;
+                    }
+                },
+                error:function(jqXHR){
+                    console.log("Error: "+jqXHR.status);
+                }
+            });
+
+
+        }
+
+        //上传文件
+        function uploadFile(slice, index,fileName,totalSize,lastModifiedTime,key,makeFile) {
+            var formDate = new FormData();
+            formDate.append("file", slice);
+            formDate.append("key",key);
+            formDate.append("resumeId",index);
+            formDate.append("totalSize",totalSize);
+            formDate.append("fileName",fileName);
+            formDate.append("storageType",$("#storageType").val());
+            formDate.append("lastModifiedTime",lastModifiedTime);
+            formDate.append("isMakeFile",makeFile);
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function (){
+                if(xhr.readyState==4) {
+                    if(xhr.status==200) {
+                        var responseText = JSON.parse(xhr.responseText);
+                        if(responseText.code == 200) {
+                            if(responseText.msg == "resourceUploadSuccess"){
+                                $("#progress").text("资源上传成功！");
+                            }else{
+                                if((index+1) == totalSlices){
+                                    uploadSize += endSize;
+                                }else{
+                                    uploadSize += blockSize;
+                                }
+                                var progress = Math.floor((uploadSize/totalSize)*10000)/100;
+                                if(progress > 100 || progress == 100){
+                                    $("#progress").text("正在执行上传，请稍等...");
+                                    uploadFile(slice, index,fileName,totalSize,lastModifiedTime,key,true);
+                                }else{
+                                    $("#progress").text(progress+"%");
+                                }
+
+                            }
+                        }else{
+
+                        }
+                    }
+                }
+            };
+            xhr.open('POST', 'resource/resumeUpload', true);//false指同步上传
+            xhr.setRequestHeader("bucketId",$("#bucketId").val());
+            xhr.setRequestHeader("request_from","Explore");
+            xhr.send(formDate);
+
+        }
+
+        function getLastModifiedTime(file){
+            var datetime = new Date(file.lastModified);
+            var year = datetime.getFullYear();
+            var month = datetime.getMonth() + 1 < 10 ? "0" + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
+            var date = datetime.getDate() < 10 ? "0" + datetime.getDate() : datetime.getDate();
+            var hour = datetime.getHours()< 10 ? "0" + datetime.getHours() : datetime.getHours();
+            var minute = datetime.getMinutes()< 10 ? "0" + datetime.getMinutes() : datetime.getMinutes();
+            var second = datetime.getSeconds()< 10 ? "0" + datetime.getSeconds() : datetime.getSeconds();
+            return year + "-" + month + "-" + date+" "+hour+":"+minute+":"+second;
+        }
+    </script>
+</head>
+<body>
+<h2>文件上传</h2>
+<p>toFile: <input type="text" id="toFile" name="toFile"/></p>
+<p>file: <input type="file" id="file" name="file"/></p><span id="progress"></span>
+<p>bucketId: <input type="text" id="bucketId" name="bucketId"/></p>
+<p>storageType: <select  id="storageType" name="storageType"/>
+                    <option value="0">标准存储</option>
+                    <option value="1">低频存储</option>
+                </select>
+</p>
+<p><input type="button" value="提交" onclick="commit();"/></p>
+</body>
+</html>
