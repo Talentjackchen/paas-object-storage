@@ -71,7 +71,6 @@
             <artifactId>spring-boot-starter-mail</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
     </dependencies>
 
     <profiles>
