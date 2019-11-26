@@ -16,8 +16,8 @@ pipeline {
         REGISTRY = '10.241.1.39'
         DOCKERHUB_NAMESPACE = 'paas'
         GITHUB_ACCOUNT = 'Talentjackchen'
-        APP_NAME = 'paas-object-storage'
         SONAR_CREDENTIAL_ID= 'sonar-token'
+        APP_NAME = 'paas-object-storage'
     }
 
     stages {
