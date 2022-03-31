@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
     <properties>
-        <spring.version>2.1.6.RELEASE</spring.version>
+        <spring.version>2.5.12</spring.version>
         <docker.path>src/main/docker</docker.path>
         <java.version>1.8</java.version>
         <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
